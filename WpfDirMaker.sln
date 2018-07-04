@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfDirMaker", "WpfDirMaker\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6B087C9-ED80-4301-8098-43AB235BBAE7}"
 	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
 		WpfDirMaker\Icons\skyrim-icon-41581-16x16.ico = WpfDirMaker\Icons\skyrim-icon-41581-16x16.ico
 	EndProjectSection
 EndProject
