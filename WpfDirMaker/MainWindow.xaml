@@ -185,7 +185,7 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
-                                        <Button Name="buttonCamelcase" Grid.Column="0" Content="Aaa" FontSize="14" FontWeight="Bold" FontFamily="Sitka Small" Click="buttonTitlecase_Click" />
+                                        <Button Name="buttonCamelcase" Grid.Column="0" Content="Aaa" FontSize="14" FontWeight="Bold" FontFamily="Sitka Small" Click="buttonCamelcase_Click" />
                                         <Button Name="buttonUppercase" Grid.Column="1" Content="AAA" FontSize="14" FontWeight="Bold" FontFamily="Sitka Small" Click="buttonUppercase_Click" />
                                     </Grid>
 

@@ -94,8 +94,8 @@ namespace WpfDirMaker
 
         public MyIO()
         {
-            ReadAppConfig();
-            ReadInitFile();
+            if (ReadAppConfig())
+                ReadInitFile();
         }
 
 
@@ -454,7 +454,7 @@ namespace WpfDirMaker
 
         #region InitFile Handling
 
-        public static void ReadAppConfig()
+        public bool ReadAppConfig()
         {
             try
             {
@@ -487,14 +487,15 @@ namespace WpfDirMaker
                 _rem18 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
                 _rem19 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
                 _rem20 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
-
                 _AND = ConfigurationManager.AppSettings[MyConstants.cExtra1].ToString();
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bad Config file: " + ex.Message);
+                MessageBox.Show("ERROR! Bad App Config file: " + ex.Message);
+                return false;
             }
+            return true;
         }
 
         /// <summary>
@@ -565,12 +566,12 @@ namespace WpfDirMaker
             }
             catch (Exception ex)
             {
-                    MessageBox.Show("ReadInitFile(): " + ex.Message);
+                MessageBox.Show("ReadInitFile(): " + ex.Message);
                 return false;
             }
 
             return false;
-        } // ReadInitFile
+        }
 
         /// <summary>
         /// Skapa/Ändra inställningar dirmaker.XML

@@ -74,7 +74,7 @@ namespace WpfDirMaker
                 value = value.RemoveStr(searchStr);
                 value = value.Replace(searchStr, "");
                 value = Regex.Replace(value, @"[\[\]']+", "");
-                value = value + " [" + searchStr + "]";
+                value = value + "[" + searchStr + "]";
             }
             return value;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -29,7 +30,6 @@ namespace WpfDirMaker
             var cleanString = instring
                 .Replace("[", "")
                 .Replace("]", "")
-                //.Replace(".And.", "+")
                 .MoveToEnd()
                 .RemoveBatch()
                 .FixDat();
@@ -41,35 +41,7 @@ namespace WpfDirMaker
                 if (strs.Length >= 3)
                 {
                     newStr = InterpretNames(strs, nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor);
-
-                    //int startPos = 3;
-                    //if (strs.Length > 5 && strs[3].ToUpper() == MyIO._AND.ToUpper())
-                    //{  // Normal Name
-                    //    newStr = strs[1] + " " + strs[2] + " + " + strs[4] + " " + strs[5] + " - " + strs[0];
-                    //    startPos = 6;
-                    //}
-                    //else if (strs.Length > 5 && strs[2].ToUpper() == MyIO._AND.ToUpper())
-                    //{   // One Name
-                    //    newStr = strs[1] + " + " + strs[3] + " " + strs[4] + " - " + strs[0];
-                    //    startPos = 6;
-                    //}
-                    //else if (strs.Length > 5 && strs[4].ToUpper() == MyIO._AND.ToUpper())
-                    //{   // Three Names
-                    //    newStr = strs[1] + " " + strs[2] + " " + strs[3] + " + " + strs[4] + " " + strs[5] + " - " + strs[0];
-                    //    startPos = 6;
-                    //}
-                    //else
-                    //{
-                    //    newStr = strs[1] + " " + strs[2] + " - " + strs[0];
-                    //    startPos = 3;
-                    //}
-
-                    //for (var i = startPos; i < strs.Length; i++)
-                    //{
-                    //    if (i == startPos)
-                    //        newStr += " - ";
-                    //    newStr += strs[i];
-                    //}
+                    
                 }
                 else
                     newStr = strs[0];
@@ -81,50 +53,67 @@ namespace WpfDirMaker
 
         public string InterpretNames(string[] strs, int nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor)
         {
-            var result = "";
-            int startPos = 6;
-            if (strs.Length <= 5)
+            if (strs == null || strs.Length == 0)
+                return "";
+            for(int i = 0; i < strs.Length; i++)
             {
-                result = strs[1] + " " + strs[2] + " - " + strs[0];
-                startPos = 3;
+                strs[i] = strs[i].UppercaseFirstLetter();
             }
 
+            var result = "";
+            int startPos = 0;
             int countAnds = strs.Count(a => a.ToUpper() == MyIO._AND.ToUpper());
             int names = 0;
-            for (int i = 1; i < strs.Length; i++)
+            if (countAnds == 0)
             {
-                startPos = i;
-                if (strs[i].ToUpper() == MyIO._AND.ToUpper())
+                if (nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor == 1)
                 {
-                    result += " + ";
-                    names++;
+                    result = strs[1] + " - " + strs[0];
+                    startPos = 1;
                 }
-                else
+                else if (nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor == 2)
                 {
-                    if (names == countAnds)
-                    {
-                        for (int n = 0; n < nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor; n++)
-                        {
-                            if (i + n < strs.Length)
-                            {
-                                result += " " + strs[i + n];
-                                startPos = i + n;
-                            }
-                        }
-                        //    if (i+1 < strs.Length)
-                        //    {
-                        //        result += strs[i] + " " + strs[i + 1];
-                        //        startPos++;
-                        //    }
-                        //    else
-                        //        result += strs[i];
-                        break;
-                    }
-                    result += " " + strs[i];
+                    result = strs[1] + " " + strs[2] + " - " + strs[0];
+                    startPos = 2;
+                }
+                else if (nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor == 3)
+                {
+                    result = strs[1] + " " + strs[2] + " " + strs[3] + " - " + strs[0];
+                    startPos = 3;
                 }
             }
-            result = result.Trim() + " - " + strs[0];
-            for (var i = startPos+1; i < strs.Length; i++)
+            else
+            {
+                for (int i = 1; i < strs.Length; i++)
+                {
+                    startPos = i;
+                    if (strs[i].ToUpper() == MyIO._AND.ToUpper())
+                    {
+                        result += " + ";
+                        names++;
+                    }
+                    else
+                    {
+                        if (names == countAnds)
+                        {
+                            for (int n = 0; n < nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor; n++)
+                            {
+                                if (i + n < strs.Length)
+                                {
+                                    result += " " + strs[i + n];
+                                    startPos = i + n;
+                                }
+                            }
+                            break; // Stop When last name is added
+                        }
+                        result += " " + strs[i];
+                    }
+                }
+                result = result.Trim() + " - " + strs[0];
+           }
+
+            // Add the rest
+            for (var i = startPos + 1; i < strs.Length; i++)
             {
                 if (i == startPos + 1)
                     result += " - ";

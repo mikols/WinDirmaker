@@ -442,7 +442,7 @@ namespace WpfDirMaker
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonTitlecase_Click(object sender, RoutedEventArgs e)
+        private void buttonCamelcase_Click(object sender, RoutedEventArgs e)
         {
             var strConv = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(textBoxConverted.Text.ToLower());
             textBoxConverted.Text = strConv;
