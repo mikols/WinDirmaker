@@ -98,6 +98,17 @@ namespace UnitTests
             NUnit.Framework.Assert.AreEqual(expected, result);
         }
 
+
+        [TestMethod]
+        public void GivenStrwithSpecialChars_When1NamesAndFullName_ThenExpectTrue()
+        {
+            var lastFullNameHasNumberOfNames = 3;
+            var instr = "Hejsan.AAA.(171101)-Nisse.Johansson.ANd.Tjerna.PerAAAsson.and.Frank.De.Boor.888..mors.kors.[asdf]";
+            var expected = "Nisse Johansson + Tjerna PerAAAsson + Frank De Boor - Hejsan171101 - MorsKors[888]";
+            var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
+            NUnit.Framework.Assert.AreEqual(expected, result);
+        }
+
         [TestCase("apa")]
         public void SanityTest(string apa)
         {

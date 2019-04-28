@@ -30,6 +30,9 @@ namespace WpfDirMaker
             var cleanString = instring
                 .Replace("[", "")
                 .Replace("]", "")
+                .Replace(")", ".")
+                .Replace("(", ".")
+                .Replace("-", ".")
                 .MoveToEnd()
                 .RemoveBatch()
                 .FixDat();
