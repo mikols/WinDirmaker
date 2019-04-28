@@ -43,7 +43,7 @@ namespace WpfDirMaker
         public static string _rem19;
         public static string _rem20;
 
-        public static string _extra;
+        public static string _AND;
 
         public string Priority1 { get; set; }
         public string Priority2 { get; set; }
@@ -70,9 +70,32 @@ namespace WpfDirMaker
         public List<MyTuple> mCacheListOfAllSearchedDirsAndFiles = new List<MyTuple>();
         public List<MyTuple> mCacheListOfAllSearchedDirsAndFilesOrderedByName = new List<MyTuple>();
 
+
+        // Sökvägar och filnamn till diverse INI och TXT(resultat) filer i CAT
+        public string FolderSourceRoot
+        {
+            get { return mFolderSource; }
+            set { mFolderSource = value; }
+        }
+
+        public string FolderDestinationRoot
+        {
+            get { return mFolderDestination; }
+            set { mFolderDestination = value; }
+        }
+
+        public string FilePathDirmakerXML
+        {
+            get
+            {
+                return System.IO.Path.Combine(MyConstants.AssemblyLocation, MyConstants.cFileDirmakerXML);
+            }
+        }
+
         public MyIO()
         {
             ReadAppConfig();
+            ReadInitFile();
         }
 
 
@@ -84,28 +107,6 @@ namespace WpfDirMaker
         public bool IsDestinationPath()
         {
             return ((mFolderDestination != "") && (Directory.Exists(mFolderDestination)));
-        }
-
-        public string FilePathDirmakerXML
-        {
-            get
-            {
-                return System.IO.Path.Combine(MyConstants.AssemblyLocation, MyConstants.cFileDirmakerXML);
-            }
-        }
-
-        // Sökvägar och filnamn till diverse INI och TXT(resultat) filer i CAT
-        // Samtliga filer ligger i CAT-katalogen
-        public string FolderSourceRoot
-        {
-            get { return mFolderSource; }
-            set { mFolderSource = value; }
-        }
-
-        public string FolderDestinationRoot
-        {
-            get { return mFolderDestination; }
-            set { mFolderDestination = value; }
         }
 
         /// <summary>
@@ -147,6 +148,7 @@ namespace WpfDirMaker
             {
                 // Catch exception if the file was already copied.
                 // MessageBox.Show(copyError.Message + "\n\n" + "Kunde ej kopiera/flytta följande fil: " + "\n" + strSourceFile);
+                MessageBox.Show(copyError.Message);
                 return 0;
             }
             catch (Exception ee)
@@ -349,6 +351,7 @@ namespace WpfDirMaker
                         }
                         catch (Exception e)
                         {
+                            MessageBox.Show("Exception: " + e.Message);
                             continue;
                         }
                         resultSearchList.Add(new MyTuple(dir.GetFileNameFromPath(), dir, "", true, "", ""));
@@ -405,13 +408,56 @@ namespace WpfDirMaker
             return false;
         }
 
+        public string CreateNewDirectoryAndMoveFilesIntoIt(string sourceDirMoveFiles)
+        {
+            string statusString;
+            int counter = 0;
+            if (Directory.Exists(sourceDirMoveFiles))
+            {
+                string[] listOfStrings = { ".wmv", ".mkv", ".avi", ".mp4", ".mpg", ".flv", ".m4v" };
+                string[] filesToBeMoved = new string[1];
+                filesToBeMoved[0] = "*.*";
+
+                DirectoryInfo MainDir = null;
+                MainDir = new DirectoryInfo(sourceDirMoveFiles);
+                // Lista filer      
+                for (int i = 0; i < filesToBeMoved.Length; i++)
+                {
+                    foreach (FileInfo fi in MainDir.GetFiles(filesToBeMoved[i]))
+                    {
+                        bool found = (listOfStrings.Where(suffix => fi.Extension.EndsWith(suffix)).FirstOrDefault() != null);
+                        if (!found)
+                        {
+                            continue;
+                        }
+
+                        string newDir = "";
+                        string strDirNameWithoutPath = fi.Name.Substring(0, fi.Name.LastIndexOf('.')).Replace(".", " ");
+                        if (CreateNewSubDirectory(sourceDirMoveFiles, strDirNameWithoutPath, out newDir))
+                        {
+                            if (MoveFile(fi.Name, sourceDirMoveFiles, newDir))
+                            {
+                                counter++;
+                            }
+                        }
+                    }
+                }
+                statusString = "Flyttade " + counter + " filer till subdirs i " + sourceDirMoveFiles + ".";
+            }
+            else
+            {
+                statusString = "FAILURE";
+            }
+            return statusString;
+        }
+
+
         #region InitFile Handling
 
         public static void ReadAppConfig()
         {
             try
             {
-
                 _resolution1 = ConfigurationManager.AppSettings[MyConstants.cFileTagResolution1].ToString();
                 _resolution2 = ConfigurationManager.AppSettings[MyConstants.cFileTagResolution2].ToString();
                 _resolution3 = ConfigurationManager.AppSettings[MyConstants.cFileTagResolution3].ToString();
@@ -442,12 +488,12 @@ namespace WpfDirMaker
                 _rem19 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
                 _rem20 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
 
-                _extra = ConfigurationManager.AppSettings[MyConstants.cExtra1].ToString();
+                _AND = ConfigurationManager.AppSettings[MyConstants.cExtra1].ToString();
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bad Config file");
+                MessageBox.Show("Bad Config file: " + ex.Message);
             }
         }
 
@@ -455,16 +501,15 @@ namespace WpfDirMaker
         /// Läs användardata/Inställningar från dirmaker.Xml. 
         /// </summary>
         /// <returns>true om filskrivning skedde, annars false</returns>
-        public bool ReadInitFile(out string sourceDir, out string destinationDir)
+        public bool ReadInitFile()
         {
-            sourceDir = ""; destinationDir = "";
             if (!File.Exists(FilePathDirmakerXML))
                 return false;
 
             try
             {
                 XDocument doc = XDocument.Load(FilePathDirmakerXML);
-                sourceDir = (from dirRoot in doc.Descendants(MyConstants.cFileTagSourceRootFolder)
+                FolderSourceRoot = (from dirRoot in doc.Descendants(MyConstants.cFileTagSourceRootFolder)
                                 select (string)dirRoot.Value).First();
 
                 var result = (from query in doc.Elements()
@@ -493,8 +538,8 @@ namespace WpfDirMaker
 
                 if (result != null)
                 {
-                    sourceDir = result.folderSourceRoot;
-                    destinationDir = result.folderDestinationRoot;
+                    FolderSourceRoot = result.folderSourceRoot;
+                    FolderDestinationRoot = result.folderDestinationRoot;
                     Priority1 = result.priority1;
                     Priority2 = result.priority2;
                     Priority3 = result.priority3;

@@ -108,7 +108,12 @@ namespace WpfDirMaker
 
         public static string RemoveStr(this string oldName, string str)
         {
-            return Regex.Replace(oldName, str, "", RegexOptions.IgnoreCase);
+
+            //return Regex.Replace(oldName, str, "", RegexOptions.IgnoreCase);
+            //return Regex.Replace(oldName, str, "", RegexOptions.IgnoreCase);
+            if (str.Length > 0)
+            oldName =  oldName.Replace(str, "");
+            return oldName;
         }
 
         public static string SmartRemoveSpaceAndDots(this string oldName)

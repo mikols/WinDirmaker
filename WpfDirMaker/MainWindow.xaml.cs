@@ -24,6 +24,7 @@ namespace WpfDirMaker
         bool AutoStart = false;
 
         private MyIO mIO = null;
+        private Interpreter mInterpreter = new Interpreter();
 
 
         /// <summary>
@@ -37,24 +38,23 @@ namespace WpfDirMaker
 
                 this.Title = "Version " + MyConstants.FileVersion + " (" + MyConstants.AssemblyVersion + ";  " + MyConstants.AssemblyLocation + ")";
                 statusItemFileVer.Content = MyConstants.FileVersion;
-                statusItemAssemblyVer.Content = MyConstants.AssemblyVersion;
+                statusItemAssemblyVer.Content = MyConstants.AssemblyVersion + " ---- (Build: 2019-04-27)";
                 statusItemLocation.Content = MyConstants.AssemblyLocation;
                 statusItemTime.Content = DateTime.Now.ToString("yyyy-MM-dd  HH:mm");
 
                 mIO = new MyIO();
-                mIO.ReadInitFile(sourceDir: out string sourceDir, destinationDir: out string destDir);
 
-                textBoxSourceFolder.Text = sourceDir;
+                textBoxSourceFolder.Text = mIO.FolderSourceRoot;
                 if (textBoxSourceFolder.Text.Length == 0)
                 {
                     string str2 = Directory.GetCurrentDirectory();//System.Reflection.Assembly.GetExecutingAssembly().Location.ToString();
                     textBoxSourceFolder.Text = System.IO.Path.GetDirectoryName(str2);
                 }
 
-                textBoxDestination.Text = destDir;
-                if (textBoxDestination.Text.Length == 0)
+                textBoxDestinationFolder.Text = mIO.FolderDestinationRoot;
+                if (textBoxDestinationFolder.Text.Length == 0)
                 {
-                    textBoxDestination.Text = textBoxSourceFolder.Text;
+                    textBoxDestinationFolder.Text = textBoxSourceFolder.Text;
                 }
 
                 //buttonSearch.IsEnabled = false;
@@ -147,7 +147,7 @@ namespace WpfDirMaker
         /// <param name="e"></param>
         private void buttonCopyPathFromSourceToDestination_Click(object sender, RoutedEventArgs e)
         {
-            textBoxDestination.Text = textBoxSourceFolder.Text;
+            textBoxDestinationFolder.Text = textBoxSourceFolder.Text;
             setDestinationDir();
         }
 
@@ -168,7 +168,7 @@ namespace WpfDirMaker
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonOpenDestFolder_Click(object sender, RoutedEventArgs e)
+        private void buttonOpenDestinationFolder_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -179,7 +179,7 @@ namespace WpfDirMaker
             }
             catch (Exception excep)
             {
-                labelSysMessage.Content = "buttonOpenDestFolder_Click: " + excep.Message;
+                labelSysMessage.Content = "buttonOpenDestinationFolder_Click: " + excep.Message;
             }
         }
 
@@ -200,8 +200,8 @@ namespace WpfDirMaker
                     strDirectory.Substring(0, 120);
                 if (Directory.Exists(strDirectory))
                 {
-                    textBoxDestination.Text = strDirectory;
-                    mIO.FolderDestinationRoot = textBoxDestination.Text;
+                    textBoxDestinationFolder.Text = strDirectory;
+                    mIO.FolderDestinationRoot = textBoxDestinationFolder.Text;
 
                     buttonSearchForFilesInSourceDirectory_Click(sender, e);
                 }
@@ -224,12 +224,12 @@ namespace WpfDirMaker
             {
                 Description = "Välj Destinations folder! ",
                 ShowNewFolderButton = true,
-                SelectedPath = textBoxDestination.Text
+                SelectedPath = textBoxDestinationFolder.Text
             };
             //      dialog.RootFolder = Environment.SpecialFolder.MyComputer;
             // dialog.RootFolder = Environment.SpecialFolder.MyComputer;
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                textBoxDestination.Text = dialog.SelectedPath;
+                textBoxDestinationFolder.Text = dialog.SelectedPath;
         } // buttonSelectDestinationFolder_Click
 
         /// <summary>
@@ -237,14 +237,14 @@ namespace WpfDirMaker
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonSelectSource_Click(object sender, RoutedEventArgs e)
+        private void ButtonSelectSourceFolder2_Click(object sender, RoutedEventArgs e)
         {
             clearSearchTable();
             var selectedDir = OpenDirectorySelectionDialog(textBoxSourceFolder.Text, "Välj ROOT folder! ");
             textBoxSourceFolder.Text = selectedDir;
             if (Directory.Exists(selectedDir))
                 setMainDir();
-        } // buttonSelectSource_Click
+        }
 
         /// <summary>
         /// SÖK IGENOM BIBLIOTEKET EFTER FILER AV TYPEN
@@ -255,7 +255,7 @@ namespace WpfDirMaker
         {
             try
             {
-                mIO.FolderDestinationRoot = textBoxDestination.Text;
+                mIO.FolderDestinationRoot = textBoxDestinationFolder.Text;
                 mIO.FolderSourceRoot = textBoxSourceFolder.Text;
                 mIO.WriteInitFile();
                 setMainDir();
@@ -303,12 +303,12 @@ namespace WpfDirMaker
             }
         }
 
-        private void textBoxRoot_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void TextBoxSourceFolder_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             setMainDir();
         }
 
-        private void TextBoxDestination_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void TextBoxDestinationFolder_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             setDestinationDir();
         }
@@ -346,7 +346,7 @@ namespace WpfDirMaker
                 }
                 catch (Exception ex)
                 {
-                    labelMessageBgFile.Content = "Filen existerar redan!";
+                    labelMessageBgFile.Content = "Filen existerar redan! - " + ex.Message;
                 }
             }
             else
@@ -417,61 +417,18 @@ namespace WpfDirMaker
 
         private void buttonCutTheCrapInterpret_Click(object sender, RoutedEventArgs e)
         {
-            char[] separator = new Char[1];
-            separator[0] = '.';
+            int nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor;
+            if (!int.TryParse(textBoxNrOfNamesInLastName.Text, out nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor))
+                nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 2;
 
-            string str = textBoxTOConvert.Text;
-            str = str
-                .Replace("[", "")
-                .Replace("]", "")
-                .MoveToEnd()
-                .RemoveBatch()
-                .FixDat();
-
-            string newStr = "";
-            string[] strs = str.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-            if (strs.Length > 0)
-            {
-                if (strs.Length >= 3)
-                {
-                    int startPos = 3;
-                    if (strs.Length > 5 && strs[3].ToUpper() == MyIO._extra.ToUpper())
-                    {
-                        newStr = strs[1] + " " + strs[2] + " + " + strs[4] + " " + strs[5] + " - " + strs[0];
-                        startPos = 6;
-                    }
-                    else
-                    {
-                        newStr = strs[1] + " " + strs[2] + " - " + strs[0];
-                        startPos = 3;
-                    }
-
-                    for (var i = startPos; i < strs.Length; i++)
-                    {
-                        if (i == startPos)
-                            newStr += " - ";
-                        newStr += strs[i];
-                    }
-                }
-                else
-                    newStr = strs[0];
-            }
-            else
-                newStr = str;
-            textBoxConverted.Text = newStr.SmartRemoveSpaceAndDots();
-            Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
+            textBoxConverted.Text = mInterpreter.InterpretDottedString(textBoxTOConvert.Text, nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor);
+            //Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
         }
 
         private void buttonCutTheCrap_Click(object sender, RoutedEventArgs e)
         {
-            char[] separator = new Char[1];
-            separator[0] = '.';
-
-            string str = textBoxTOConvert.Text;
-            str = str.MoveToEnd().RemoveBatch().Replace(".", " ").SmartRemoveSpaceAndDots();
-
-            textBoxConverted.Text = str;
-            Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
+            textBoxConverted.Text = mInterpreter.CutTheCrap(textBoxTOConvert.Text);
+            //Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
         }
 
         private void buttonPasteTorr_Click(object sender, RoutedEventArgs e)
@@ -512,43 +469,7 @@ namespace WpfDirMaker
 
         private void buttonCreateNewDirectoryAndMoveFilesIntoIt_Click(object sender, RoutedEventArgs e)
         {
-            int counter = 0;
-            if (Directory.Exists(textBoxSourceDirMoveFiles.Text))
-            {
-                string[] listOfStrings = { ".wmv", ".mkv", ".avi", ".mp4", ".mpg", ".flv", ".m4v" };
-                string[] filesToBeMoved = new string[1];
-                filesToBeMoved[0] = "*.*";
-
-                DirectoryInfo MainDir = null;
-                MainDir = new DirectoryInfo(textBoxSourceDirMoveFiles.Text);
-                // Lista filer      
-                for (int i = 0; i < filesToBeMoved.Length; i++)
-                {
-                    foreach (FileInfo fi in MainDir.GetFiles(filesToBeMoved[i]))
-                    {
-                        bool found = (listOfStrings.Where(suffix => fi.Extension.EndsWith(suffix)).FirstOrDefault() != null);
-                        if (!found)
-                        {
-                            continue;
-                        }
-
-                        string newDir = "";
-                        string strDirNameWithoutPath = fi.Name.Substring(0, fi.Name.LastIndexOf('.')).Replace(".", " ");
-                        if (mIO.CreateNewSubDirectory(textBoxSourceDirMoveFiles.Text, strDirNameWithoutPath, out newDir))
-                        {
-                            if (mIO.MoveFile(fi.Name, textBoxSourceDirMoveFiles.Text, newDir))
-                            {
-                                counter++;
-                            }
-                        }
-                    }
-                }
-                TextBoxCreatedDirectories.Text = "Flyttade " + counter + " filer till subdirs i " + textBoxSourceDirMoveFiles.Text + ".";
-            }
-            else
-            {
-                TextBoxCreatedDirectories.Text = "FAILURE";
-            }
+            TextBoxCreatedDirectories.Text = mIO.CreateNewDirectoryAndMoveFilesIntoIt(textBoxSourceDirMoveFiles.Text);
         }
 
         private void buttonSourceDir_Click(object sender, RoutedEventArgs e)
@@ -717,7 +638,7 @@ namespace WpfDirMaker
                 }
             }
             labelSysMessage.Content = "Flyttat : " + iNrMoved.ToString() + " st filer!";
-        } // buttonSkapaDir_Click
+        } 
 
         /// <summary>
         /// Add suffix to old directory name. SHow in table
@@ -817,7 +738,7 @@ namespace WpfDirMaker
                 }
                 mFileNameSeparators = tmp;
             }
-        } // getNameSeparators
+        } 
 
         /// <summary>
         /// Sätt källbibliotek
@@ -825,11 +746,9 @@ namespace WpfDirMaker
         /// <returns></returns>
         private bool setMainDir()
         {
-            //buttonSearch.IsEnabled = false;
             if (Directory.Exists(textBoxSourceFolder.Text))
             {
                 mIO.FolderSourceRoot = textBoxSourceFolder.Text;
-                //buttonSearch.IsEnabled = true;
                 try
                 {
                     Directory.SetCurrentDirectory(mIO.FolderSourceRoot);
@@ -849,10 +768,9 @@ namespace WpfDirMaker
         /// <returns></returns>
         private bool setDestinationDir()
         {
-            if (Directory.Exists(textBoxDestination.Text))
+            if (Directory.Exists(textBoxDestinationFolder.Text))
             {
-                mIO.FolderDestinationRoot = textBoxDestination.Text;
-                //DestinationDir = new DirectoryInfo(mIO.FolderDestinationRoot);
+                mIO.FolderDestinationRoot = textBoxDestinationFolder.Text;
                 return true;
             }
             else
@@ -872,38 +790,37 @@ namespace WpfDirMaker
             strNewFolderName = "";
             TheName = "";
             string fileNameWithoutSuffix = "";
-            string strSuffix = "";
             bool bSuccess = false;
             if (File.Exists(strFileName))
             {
-            fileNameWithoutSuffix = strFileName.Substring(0, strFileName.LastIndexOf('.'));
-            // Läs in namnseparatorn
-            loadNameSeparators();
-            string[] strs = fileNameWithoutSuffix.Split(mFileNameSeparators, StringSplitOptions.RemoveEmptyEntries);
-            if (strs.Length > 0)
-                TheName = strs[0];
+                fileNameWithoutSuffix = strFileName.Substring(0, strFileName.LastIndexOf('.'));
+                // Läs in namnseparatorn
+                loadNameSeparators();
+                string[] strs = fileNameWithoutSuffix.Split(mFileNameSeparators, StringSplitOptions.RemoveEmptyEntries);
+                if (strs.Length > 0)
+                    TheName = strs[0];
 
-            string strMiddle = "";
-            if (textBoxMiddle.Text.Trim().Length > 0)
-                strMiddle = " " + textBoxMiddle.Text;
+                string strMiddle = "";
+                if (textBoxMiddle.Text.Trim().Length > 0)
+                    strMiddle = " " + textBoxMiddle.Text;
 
-            string strEnd = "";
-            if (textBoxEnd.Text.Trim().Length > 0)
-                strEnd = " " + textBoxEnd.Text;
+                string strEnd = "";
+                if (textBoxEnd.Text.Trim().Length > 0)
+                    strEnd = " " + textBoxEnd.Text;
 
-            if (strs.Length == 1)
-            {
-                strNewFolderName = TheName;
-            }
-            else if (strs.Length == 2)
-            {
-                strNewFolderName =
-                string.Format("{0} - {1}{2}{3}", TheName, strs[1].Trim(), strMiddle, strEnd);
-            }
-            else if (strs.Length == 3)
-            {
-                strNewFolderName = string.Format("{0} - {1}{2} {3}{4}", TheName, strs[1], strMiddle, strs[2], strEnd);
-            }
+                if (strs.Length == 1)
+                {
+                    strNewFolderName = TheName;
+                }
+                else if (strs.Length == 2)
+                {
+                    strNewFolderName =
+                    string.Format("{0} - {1}{2}{3}", TheName, strs[1].Trim(), strMiddle, strEnd);
+                }
+                else if (strs.Length == 3)
+                {
+                    strNewFolderName = string.Format("{0} - {1}{2} {3}{4}", TheName, strs[1], strMiddle, strs[2], strEnd);
+                }
             }
             return bSuccess;
         }
