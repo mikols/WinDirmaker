@@ -8,6 +8,13 @@ namespace WpfDirMaker
 {
     public class Interpreter
     {
+        private MyIO _myIO;
+
+        public Interpreter(MyIO myIO)
+        {
+            _myIO = myIO;
+        }
+
         public string CutTheCrap(string instring)
         {
             if (string.IsNullOrEmpty(instring))
@@ -16,7 +23,7 @@ namespace WpfDirMaker
             char[] separator = new Char[1];
             separator[0] = '.';
 
-            return instring.MoveToEnd().RemoveBatch().Replace(".", " ").SmartRemoveSpaceAndDots();
+            return instring.MoveToEnd().RemoveJunkStrings(_myIO.RemoveShitList).Replace(".", " ").SmartRemoveSpaceAndDots();
         }
 
         public string InterpretDottedString(string instring, int nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor)
@@ -28,13 +35,13 @@ namespace WpfDirMaker
             separator[0] = '.';
 
             var cleanString = instring
+                .RemoveJunkStrings(_myIO.RemoveShitList)
                 .Replace("[", "")
                 .Replace("]", "")
                 .Replace(")", ".")
                 .Replace("(", ".")
                 .Replace("-", ".")
                 .MoveToEnd()
-                .RemoveBatch()
                 .FixDat();
 
             string newStr = "";

@@ -27,22 +27,29 @@ namespace WpfDirMaker
         public const string cFileTagResolution7 = "Res7";
         public const string cFileTagResolution8 = "Res8";
 
-        public const string cFileTagRename1 = "Rem1";
-        public const string cFileTagRename2 = "Rem2";
-        public const string cFileTagRename3 = "Rem3";
-        public const string cFileTagRename4 = "Rem4";
-        public const string cFileTagRename5 = "Rem5";
-        public const string cFileTagRename6 = "Rem6";
-        public const string cFileTagRename7 = "Rem7";
-        public const string cFileTagRename8 = "Rem8";
-        public const string cFileTagRename9 = "Rem9";
-        public const string cFileTagRename10 = "Rem10";
-        public const string cFileTagRename11 = "Rem11";
-        public const string cFileTagRename12 = "Rem12";
-        public const string cFileTagRename13 = "Rem13";
-        public const string cFileTagRename14 = "Rem14";
-        public const string cFileTagRename15 = "Rem15";
-        public const string cFileTagRename16 = "Rem16";
+        //public const string cFileTagRename1 = "Rem1";
+        //public const string cFileTagRename2 = "Rem2";
+        //public const string cFileTagRename3 = "Rem3";
+        //public const string cFileTagRename4 = "Rem4";
+        //public const string cFileTagRename5 = "Rem5";
+        //public const string cFileTagRename6 = "Rem6";
+        //public const string cFileTagRename7 = "Rem7";
+        //public const string cFileTagRename8 = "Rem8";
+        //public const string cFileTagRename9 = "Rem9";
+        //public const string cFileTagRename10 = "Rem10";
+        //public const string cFileTagRename11 = "Rem11";
+        //public const string cFileTagRename12 = "Rem12";
+        //public const string cFileTagRename13 = "Rem13";
+        //public const string cFileTagRename14 = "Rem14";
+        //public const string cFileTagRename15 = "Rem15";
+        //public const string cFileTagRename16 = "Rem16";
+        //public const string cFileTagRename17 = "Rem17";
+        //public const string cFileTagRename18 = "Rem18";
+        //public const string cFileTagRename19 = "Rem19";
+        //public const string cFileTagRename20 = "Rem20";
+
+        public const string cRemoveThisShit = "RemoveThisShit";
+        
 
         public const string cExtra1 = "Extra1";
 

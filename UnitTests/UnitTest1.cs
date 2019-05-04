@@ -15,7 +15,7 @@ namespace UnitTests
         public void setUpTests()
         {
             myIO = new MyIO();
-            mInterpreter = new Interpreter();
+            mInterpreter = new Interpreter(myIO);
         }
 
         [TestMethod]
@@ -105,6 +105,17 @@ namespace UnitTests
             var lastFullNameHasNumberOfNames = 3;
             var instr = "Hejsan.AAA.(171101)-Nisse.Johansson.ANd.Tjerna.PerAAAsson.and.Frank.De.Boor.888..mors.kors.[asdf]";
             var expected = "Nisse Johansson + Tjerna PerAAAsson + Frank De Boor - Hejsan171101 - MorsKors[888]";
+            var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
+            NUnit.Framework.Assert.AreEqual(expected, result);
+        }
+
+
+        [TestMethod]
+        public void GivenDottedStrWithMP4KTR_When2NamesAndLastNameIsFirstPlusLastname_ThenExpectTrue()
+        {
+            var lastFullNameHasNumberOfNames = 2;
+            var instr = "Hejsan.AAA.17.11.01.Nisse.Johansson.ANd.Tjerna.PerAAAsson.888..mors.kors.AAA.MP4-KTR[asdf]";
+            var expected = "Nisse Johansson + Tjerna PerAAAsson - Hejsan171101 - MorsKors[888]";
             var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
             NUnit.Framework.Assert.AreEqual(expected, result);
         }

@@ -24,7 +24,7 @@ namespace WpfDirMaker
         bool AutoStart = false;
 
         private MyIO mIO = null;
-        private Interpreter mInterpreter = new Interpreter();
+        private Interpreter mInterpreter = null;
 
 
         /// <summary>
@@ -43,6 +43,7 @@ namespace WpfDirMaker
                 statusItemTime.Content = DateTime.Now.ToString("yyyy-MM-dd  HH:mm");
 
                 mIO = new MyIO();
+                mInterpreter = new Interpreter(mIO);
 
                 textBoxSourceFolder.Text = mIO.FolderSourceRoot;
                 if (textBoxSourceFolder.Text.Length == 0)

@@ -22,26 +22,28 @@ namespace WpfDirMaker
         public static string _resolution7;
         public static string _resolution8;
 
-        public static string _rem1;
-        public static string _rem2;
-        public static string _rem3;
-        public static string _rem4;
-        public static string _rem5;
-        public static string _rem6;
-        public static string _rem7;
-        public static string _rem8;
-        public static string _rem9;
-        public static string _rem10;
-        public static string _rem11;
-        public static string _rem12;
-        public static string _rem13;
-        public static string _rem14;
-        public static string _rem15;
-        public static string _rem16;
-        public static string _rem17;
-        public static string _rem18;
-        public static string _rem19;
-        public static string _rem20;
+        //public static string _rem1;
+        //public static string _rem2;
+        //public static string _rem3;
+        //public static string _rem4;
+        //public static string _rem5;
+        //public static string _rem6;
+        //public static string _rem7;
+        //public static string _rem8;
+        //public static string _rem9;
+        //public static string _rem10;
+        //public static string _rem11;
+        //public static string _rem12;
+        //public static string _rem13;
+        //public static string _rem14;
+        //public static string _rem15;
+        //public static string _rem16;
+        //public static string _rem17;
+        //public static string _rem18;
+        //public static string _rem19;
+        //public static string _rem20;
+
+        public List<string> RemoveShitList;
 
         public static string _AND;
 
@@ -467,27 +469,34 @@ namespace WpfDirMaker
                 _resolution7 = ConfigurationManager.AppSettings[MyConstants.cFileTagResolution7].ToString();
                 _resolution8 = ConfigurationManager.AppSettings[MyConstants.cFileTagResolution8].ToString();
 
-                _rem1 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename1].ToString();
-                _rem2 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename2].ToString();
-                _rem3 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename3].ToString();
-                _rem4 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename4].ToString();
-                _rem5 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename5].ToString();
-                _rem6 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename6].ToString();
-                _rem7 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename7].ToString();
-                _rem8 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename8].ToString();
-                _rem9 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename9].ToString();
-                _rem10 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename10].ToString();
-                _rem11 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename11].ToString();
-                _rem12 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename12].ToString();
-                _rem13 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename13].ToString();
-                _rem14 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename14].ToString();
-                _rem15 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename15].ToString();
-                _rem16 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
-                _rem17 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
-                _rem18 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
-                _rem19 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
-                _rem20 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
+                //_rem1 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename1].ToString();
+                //_rem2 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename2].ToString();
+                //_rem3 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename3].ToString();
+                //_rem4 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename4].ToString();
+                //_rem5 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename5].ToString();
+                //_rem6 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename6].ToString();
+                //_rem7 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename7].ToString();
+                //_rem8 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename8].ToString();
+                //_rem9 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename9].ToString();
+                //_rem10 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename10].ToString();
+                //_rem11 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename11].ToString();
+                //_rem12 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename12].ToString();
+                //_rem13 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename13].ToString();
+                //_rem14 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename14].ToString();
+                //_rem15 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename15].ToString();
+                //_rem16 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename16].ToString();
+                //_rem17 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename17].ToString();
+                //_rem18 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename18].ToString();
+                //_rem19 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename19].ToString();
+                //_rem20 = ConfigurationManager.AppSettings[MyConstants.cFileTagRename20].ToString();
                 _AND = ConfigurationManager.AppSettings[MyConstants.cExtra1].ToString();
+
+                var removeThisShit = ConfigurationManager.AppSettings[MyConstants.cRemoveThisShit].ToString().Trim();
+                if (removeThisShit.Length > 0)
+                {
+                    RemoveShitList = removeThisShit.Split(',').ToList();
+                }
+
 
             }
             catch (Exception ex)

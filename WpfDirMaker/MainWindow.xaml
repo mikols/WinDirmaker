@@ -31,9 +31,9 @@
 
                     <StackPanel Grid.Row="0" CanVerticallyScroll="False" Background="LightYellow"  Grid.RowSpan="2">
 
-                        <Grid Name="GridSearchSettingsAndFolders" Margin="5" >
+                        <Grid Name="GridSearchSettingsAndFolders" Margin="0" >
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="50"/>
+                                <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>

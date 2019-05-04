@@ -197,31 +197,14 @@ namespace WpfDirMaker
             }
         }
 
-        public static string RemoveBatch(this string value)
+        public static string RemoveJunkStrings(this string value, List<string> searchStrings)
         {
             try
             {
-                value = value.RemoveStr(MyIO._rem1);
-                value = value.RemoveStr(MyIO._rem2);
-                value = value.RemoveStr(MyIO._rem3);
-                value = value.RemoveStr(MyIO._rem4);
-                value = value.RemoveStr(MyIO._rem5);
-                value = value.RemoveStr(MyIO._rem6);
-                value = value.RemoveStr(MyIO._rem7);
-                value = value.RemoveStr(MyIO._rem8);
-                value = value.RemoveStr(MyIO._rem9);
-                value = value.RemoveStr(MyIO._rem10);
-                value = value.RemoveStr(MyIO._rem11);
-                value = value.RemoveStr(MyIO._rem12);
-                value = value.RemoveStr(MyIO._rem13);
-                value = value.RemoveStr(MyIO._rem14);
-                value = value.RemoveStr(MyIO._rem15);
-                value = value.RemoveStr(MyIO._rem16);
-                value = value.RemoveStr(MyIO._rem17);
-                value = value.RemoveStr(MyIO._rem18);
-                value = value.RemoveStr(MyIO._rem19);
-                value = value.RemoveStr(MyIO._rem20);
-
+                foreach(var removeStr in searchStrings)
+                {
+                    value = value.RemoveStr(removeStr);
+                }
             }
             catch (Exception e)
             {
