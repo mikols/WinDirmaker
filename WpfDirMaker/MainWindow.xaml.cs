@@ -417,17 +417,14 @@ namespace WpfDirMaker
 
         private void buttonCutTheCrapInterpret_Click(object sender, RoutedEventArgs e)
         {
-            //if (!int.TryParse(textBoxNrOfNamesInLastName.Text, out nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor))
-            nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 2;
-
             textBoxConverted.Text = mInterpreter.InterpretDottedString(textBoxTOConvert.Text, nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor);
-            //Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
+            Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
         }
 
         private void buttonCutTheCrap_Click(object sender, RoutedEventArgs e)
         {
             textBoxConverted.Text = mInterpreter.CutTheCrap(textBoxTOConvert.Text);
-            //Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
+            Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
         }
 
         private void buttonPasteTorr_Click(object sender, RoutedEventArgs e)

@@ -3,10 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using WpfDirMaker;
 
-namespace UnitTests
+namespace UnitTestsNameFiltering
 {
     [TestClass]
-    public class UnitTestCore
+    public class UnitTestNameFiltering
     {
         private MyIO myIO;
         private Interpreter mInterpreter;
@@ -16,7 +16,7 @@ namespace UnitTests
         {
             myIO = new MyIO();
             mInterpreter = new Interpreter(myIO);
-            myIO.RemoveShitString = "Mors,KORS,asdf,dfghdhdgh,.AAA,MP4-KTR,APA,Kaka";
+            myIO.RemoveShitString = "Mors,KORS,asdf.to,asdf,dfghdhdgh,.AAA,MP4-KTR,APA,Kaka";
         }
 
         [TestMethod]
@@ -115,6 +115,16 @@ namespace UnitTests
             var lastFullNameHasNumberOfNames = 2;
             var instr = "Hejsan.AAA.17.11.01.Nisse.Johansson.ANd.Tjerna.PerAAAsson.888..mors.kors.AAA.MP4-KTR[asdf]";
             var expected = "Nisse Johansson + Tjerna PerAAAsson - Hejsan171101 - MorsKors[888]";
+            var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
+            NUnit.Framework.Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void GivenDottedStrWithMP4KTR_When1NamesAndLastNameIsFirstPlusLastname_ThenExpectTrue()
+        {
+            var lastFullNameHasNumberOfNames = 2;
+            var instr = "FakeTest.17.11.01.Nisse.Johansson.AAA.1080p.MP4-KTR[asdf.to]";
+            var expected = "Nisse Johansson - FakeTest171101 [1080p]";
             var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
             NUnit.Framework.Assert.AreEqual(expected, result);
         }

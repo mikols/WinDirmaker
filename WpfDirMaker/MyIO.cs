@@ -566,8 +566,9 @@ namespace WpfDirMaker
                 System.Xml.Linq.XElement xmlroot = new System.Xml.Linq.XElement("Dirmaker");
 
                 xmlroot.Add(
-                    new System.Xml.Linq.XElement(MyConstants.cFileTagSourceRootFolder, mFolderSource),
-                    new System.Xml.Linq.XElement(MyConstants.cFileTagDestinationRootFolder, mFolderDestination),
+                    new XElement("Version", MyConstants.FileVersion),
+                    new XElement(MyConstants.cFileTagSourceRootFolder, mFolderSource),
+                    new XElement(MyConstants.cFileTagDestinationRootFolder, mFolderDestination),
                     new XElement(MyConstants.cPriorityWork1, Priority1),
                     new XElement(MyConstants.cPriorityWork2, Priority2),
                     new XElement(MyConstants.cPriorityWork3, Priority3),
