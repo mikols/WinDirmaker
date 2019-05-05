@@ -99,7 +99,6 @@ namespace UnitTests
             NUnit.Framework.Assert.AreEqual(expected, result);
         }
 
-
         [TestMethod]
         public void GivenStrwithSpecialChars_When1NamesAndFullName_ThenExpectTrue()
         {
@@ -109,7 +108,6 @@ namespace UnitTests
             var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
             NUnit.Framework.Assert.AreEqual(expected, result);
         }
-
 
         [TestMethod]
         public void GivenDottedStrWithMP4KTR_When2NamesAndLastNameIsFirstPlusLastname_ThenExpectTrue()

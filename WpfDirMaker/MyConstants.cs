@@ -13,8 +13,6 @@ namespace WpfDirMaker
         // Standardfil för att minnas inställningar fr tidigare körningar
         public const string cFileDirmakerXML = "Dirmaker.XML";
 
-        public const string cFileTagVersion = "Version";
-        public const string cFileTagAssemblyVersion = "AssemblyVersion";
         public const string cFileTagSourceRootFolder = "SourceRootFolder";
         public const string cFileTagDestinationRootFolder = "DestinationRootFolder";
 
