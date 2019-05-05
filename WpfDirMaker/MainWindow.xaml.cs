@@ -1,28 +1,27 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.Windows;
-using System.Windows.Shapes;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Configuration;
-using System.Linq;
 using System.Globalization;
-using System.Windows.Input;
-using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace WpfDirMaker
 {
+    
+
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public char[] mFileNameSeparators = null;
-        List<MyTuple> mFileOrDirList = new List<MyTuple>();
-        List<MyTuple> mAllFilesOrDirsDatagridList = new List<MyTuple>();
-        bool AutoStart = false;
 
+        public char[] mFileNameSeparators = null;
+        private List<MyTuple> mFileOrDirList = new List<MyTuple>();
+        private List<MyTuple> mAllFilesOrDirsDatagridList = new List<MyTuple>();
+        bool AutoStart = false;
+        private int nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 2;
         private MyIO mIO = null;
         private Interpreter mInterpreter = null;
 
@@ -418,9 +417,8 @@ namespace WpfDirMaker
 
         private void buttonCutTheCrapInterpret_Click(object sender, RoutedEventArgs e)
         {
-            int nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor;
-            if (!int.TryParse(textBoxNrOfNamesInLastName.Text, out nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor))
-                nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 2;
+            //if (!int.TryParse(textBoxNrOfNamesInLastName.Text, out nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor))
+            nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 2;
 
             textBoxConverted.Text = mInterpreter.InterpretDottedString(textBoxTOConvert.Text, nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor);
             //Clipboard.SetData(DataFormats.Text, textBoxConverted.Text);
@@ -913,15 +911,26 @@ namespace WpfDirMaker
             tbPrio7.Text = " ";
         }
 
+        private void RbOneName_Click(object sender, RoutedEventArgs e)
+        {
+            nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 1;
+            buttonCutTheCrapInterpret_Click(sender, e);
+        }
 
+        private void RbTwoNames_Click(object sender, RoutedEventArgs e)
+        {
+            nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 2;
+            buttonCutTheCrapInterpret_Click(sender, e);
+        }
 
+        private void RbThreeNames_Click(object sender, RoutedEventArgs e)
+        {
+            nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor = 3;
+            buttonCutTheCrapInterpret_Click(sender, e);
+        }
 
         #endregion
 
-        //private void TabItem_SearchAllPage_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    TextboxSearchForDirOrFile.Focus();
-        //}
     }
 
 

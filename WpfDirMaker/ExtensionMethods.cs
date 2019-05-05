@@ -197,11 +197,13 @@ namespace WpfDirMaker
             }
         }
 
-        public static string RemoveJunkStrings(this string value, List<string> searchStrings)
+        public static string RemoveJunkStrings(this string value, List<string> removeShitList)
         {
+            if (removeShitList == null || removeShitList.Count == 0)
+                return value;
             try
             {
-                foreach(var removeStr in searchStrings)
+                foreach(var removeStr in removeShitList)
                 {
                     value = value.RemoveStr(removeStr);
                 }

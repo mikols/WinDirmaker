@@ -13,7 +13,10 @@
     <add key="Res5" value="1080" />
     <add key="Res6" value="1080p" />
     <add key="Res7" value="1080p" />
-    <add key="Res8" value="1080p" />      
+    <add key="Res8" value="1080p" />
+
+    <add key="RemoveThisShit" value="Mors,KORS,asdf,dfghdhdgh,.AAA,MP4-KTR" />
+      
     <add key="Extra1" value="And" />
     <add key="ClientSettingsProvider.ServiceUri" value="" />
   </appSettings>

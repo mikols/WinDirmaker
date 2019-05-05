@@ -16,6 +16,7 @@ namespace UnitTests
         {
             myIO = new MyIO();
             mInterpreter = new Interpreter(myIO);
+            myIO.RemoveShitString = "Mors,KORS,asdf,dfghdhdgh,.AAA,MP4-KTR,APA,Kaka";
         }
 
         [TestMethod]
