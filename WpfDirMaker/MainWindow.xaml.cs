@@ -5,6 +5,7 @@ using System.IO;
 using System.Configuration;
 using System.Globalization;
 using System.Windows.Data;
+using System.Reflection;
 
 namespace WpfDirMaker
 {
@@ -37,7 +38,7 @@ namespace WpfDirMaker
 
                 this.Title = "Version " + MyConstants.FileVersion + " (" + MyConstants.AssemblyVersion + ";  " + MyConstants.AssemblyLocation + ")";
                 statusItemFileVer.Content = MyConstants.FileVersion;
-                statusItemAssemblyVer.Content = MyConstants.AssemblyVersion + " ---- (Build: 2019-04-27)";
+                statusItemAssemblyVer.Content = MyConstants.AssemblyVersion + ", Built: " + MyConstants.FileVersionCommentBuildDate;
                 statusItemLocation.Content = MyConstants.AssemblyLocation;
                 statusItemTime.Content = DateTime.Now.ToString("yyyy-MM-dd  HH:mm");
 
@@ -241,6 +242,9 @@ namespace WpfDirMaker
         {
             clearSearchTable();
             var selectedDir = OpenDirectorySelectionDialog(textBoxSourceFolder.Text, "Välj ROOT folder! ");
+            if (string.IsNullOrEmpty(selectedDir))
+                return;
+
             textBoxSourceFolder.Text = selectedDir;
             if (Directory.Exists(selectedDir))
                 setMainDir();

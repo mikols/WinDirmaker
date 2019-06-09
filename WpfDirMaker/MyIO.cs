@@ -141,8 +141,6 @@ namespace WpfDirMaker
             catch (IOException copyError)
             {
                 // Catch exception if the file was already copied.
-                // MessageBox.Show(copyError.Message + "\n\n" + "Kunde ej kopiera/flytta följande fil: " + "\n" + strSourceFile);
-                MessageBox.Show(copyError.Message);
                 return 0;
             }
             catch (Exception ee)

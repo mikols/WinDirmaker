@@ -109,6 +109,17 @@ namespace WpfDirMaker
             }
         } // FileVersion
 
+        public static string FileVersionCommentBuildDate
+        {
+            get
+            {
+                System.Reflection.Assembly asm = System.Reflection.Assembly.GetExecutingAssembly();
+                System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(asm.Location);
+                return String.Format("{0}", fvi.Comments);
+            }
+        } // FileVersion
+
+
         /// <summary>
         /// Splittar upp filnamn och sökväg i mindre beståndsdelar
         /// </summary>

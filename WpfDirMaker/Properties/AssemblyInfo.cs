@@ -8,7 +8,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WpfDirMaker")]
-[assembly: AssemblyDescription("2018-06-18")]
+[assembly: AssemblyDescription("2019-06-09")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("miosoft ab")]
 [assembly: AssemblyProduct("WpfDirMaker")]
@@ -51,8 +51,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("5.9.3.0")]
-[assembly: AssemblyFileVersion("5.9.3.0")]
+[assembly: AssemblyVersion("5.9.4.0")]
+[assembly: AssemblyFileVersion("5.9.4.0")]
 [assembly: Guid("dadfacdd-4654-4e70-b74e-c2375daad1f8")]
 [assembly: NeutralResourcesLanguage("en")]
 
