@@ -15,9 +15,17 @@ namespace WpfDirMaker
             //....
         }
 
+        private static bool isNumber(string str)
+        {
+            var res = Regex.IsMatch(str, @"\d");
+            return res;
+        }
 
         public static string FixDat(this string value)
         {
+            if (!isNumber(value))
+                return value;
+
             int pos = value.ToUpper().IndexOf(".");
             if (pos <= 0) return value;
 

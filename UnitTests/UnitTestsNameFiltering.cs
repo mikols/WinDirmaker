@@ -129,6 +129,46 @@ namespace UnitTestsNameFiltering
             NUnit.Framework.Assert.AreEqual(expected, result);
         }
 
+        [TestMethod]
+        public void GivenShortString_WhenNameIsFewChars_ThenExpectSuccess()
+        {
+            var lastFullNameHasNumberOfNames = 2;
+            var instr = "hej";
+            var expected = "hej";
+            var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
+            NUnit.Framework.Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void GivenShortString_WhenNameIsOneChar_ThenExpectSuccess()
+        {
+            var lastFullNameHasNumberOfNames = 2;
+            var instr = "h";
+            var expected = "h";
+            var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
+            NUnit.Framework.Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void GivenEmptyString_WhenNoName_ThenExpectSuccess()
+        {
+            var lastFullNameHasNumberOfNames = 2;
+            var instr = "h";
+            var expected = "h";
+            var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
+            NUnit.Framework.Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void GivenOnlyOneName_WhenNameIsFirstAndLastname_ThenExpectSuccess()
+        {
+            var lastFullNameHasNumberOfNames = 2;
+            var instr = "hej.hooo";
+            var expected = "hej hooo";
+            var result = mInterpreter.InterpretDottedString(instr, lastFullNameHasNumberOfNames);
+            NUnit.Framework.Assert.AreEqual(expected, result);
+        }
+
         [TestCase("apa")]
         public void SanityTest(string apa)
         {

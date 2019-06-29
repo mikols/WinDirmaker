@@ -51,14 +51,19 @@ namespace WpfDirMaker
                 if (strs.Length >= 3)
                 {
                     newStr = InterpretNames(strs, nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor);
-                    
+
                 }
                 else
-                    newStr = strs[0];
+                {
+                    foreach(var str in strs)
+                    {
+                        newStr += str + " "; 
+                    }
+                }
             }
             else
                 newStr = cleanString;
-            return newStr.SmartRemoveSpaceAndDots();
+            return newStr.SmartRemoveSpaceAndDots().Trim();
         }
 
         public string InterpretNames(string[] strs, int nrOfNamesForTheLatNameOrIfiItIsOnlyOneNameForInstanceFrankDeBoor)
