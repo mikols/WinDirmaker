@@ -499,7 +499,7 @@
             <TabItem Name="TabItem_SearchAllPage" Header="Suchen Für Alles"   >
                 <DockPanel Name="DockPanelSearchAllPage">
 
-                    <Grid Name="GridSearchAllTop" DockPanel.Dock="Top" Background="Azure" Height="166" Margin="5,13,5,5">
+                    <Grid Name="GridSearchAllTop" DockPanel.Dock="Top" Background="Azure" Height="166" Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition MaxWidth="80"/>
                             <ColumnDefinition Width="2*"/>
@@ -584,14 +584,19 @@
                             </Button.Background> Duplicates ->
                         </Button>
 
+                        <WrapPanel x:Name="CheckBoxes" Grid.Row="6" Grid.Column="4">
+                            <CheckBox  x:Name="CheckBoxFilterDirFolders" IsChecked="{Binding Path=ShowDirs, Mode=TwoWay}" Content="Show directories" BorderThickness="2,2,2,2" Margin="5" Padding="5,0,0,0"/>
+                            <CheckBox  x:Name="CheckBoxFilterByName" IsChecked="{Binding Path=FilterBýName, Mode=TwoWay}" Content="Filter by name (size)" BorderThickness="2,2,2,2" Margin="5" Padding="5,0,0,0" FontSize="14"/>
+                        </WrapPanel>
 
                         <Grid Grid.Row="5" Grid.Column="4">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition />
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="120"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Button Name="ButtonClearSearchAllDirsAndFiles" Grid.Row="0" Grid.Column="0" Margin="12,0,0,0"  Width="100"  HorizontalAlignment="Left" Click="ButtonClearSearchAllDirsAndFiles_Click">
+                            <Button Name="ButtonClearSearchAllDirsAndFiles" Grid.Row="0" Grid.Column="0" Margin="12,0,0,0"  Width="100" Click="ButtonClearSearchAllDirsAndFiles_Click">
                                 <Button.Background>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="#FFAE1010" Offset="0"/>
@@ -599,7 +604,7 @@
                                     </LinearGradientBrush>
                                 </Button.Background> Clear Table
                             </Button>
-                            <Button Name="ButtonSaveSettings" Grid.Row="0" Grid.Column="1" Width="100"  HorizontalAlignment="Left" Content="Save Settings" Click="ButtonSaveSettings_Click">
+                            <Button Name="ButtonSaveSettings" Grid.Row="0" Grid.Column="1" Width="100"  Content="Save Settings" Click="ButtonSaveSettings_Click">
                                 <Button.Background>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="#FF7BD332" Offset="0"/>
@@ -607,15 +612,8 @@
                                     </LinearGradientBrush>
                                 </Button.Background>
                             </Button>
-                            <Button Name="ButtonLoadListOfFileAndDirs" Grid.Row="0" Grid.Column="2" Width="100"  HorizontalAlignment="Left" Content="Load" Click="ButtonLoadListOfFileAndDirs_Click" Height="23" VerticalAlignment="Bottom" Opacity="0.66" RenderTransformOrigin="0.5,0.5" >
-                                <Button.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform ScaleX="1.5"/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </Button.RenderTransform>
+                            <Button Name="ButtonLoadListOfFileAndDirs" Grid.Row="0" Grid.Column="2" Width="100"  Content="Load" Click="ButtonLoadListOfFileAndDirs_Click" Height="23" VerticalAlignment="Bottom" Opacity="0.66" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" >
+                                
                                 <Button.Background>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="Yellow" Offset="0"/>
@@ -633,13 +631,13 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
+                            <Label Name="labelLoadFoundDirsAndFiles" Grid.Row="0" Grid.Column="3" Foreground="Green" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right">0 objekt laddat i systemet</Label>
 
 
                         </Grid>
 
                         <!--Next and Last Row in grid -->
                         <Label Name="labelSearchAllDirsInformation" Grid.Row="6" Grid.Column="1" Foreground="#FFC36D32" FontWeight="Bold" FontSize="14">-</Label>
-                        <Label Name="labelLoadFoundDirsAndFiles" Grid.Row="6" Grid.Column="4" Foreground="Green" FontWeight="Bold" FontSize="14" HorizontalAlignment="Right">0 objekt laddat i systemet</Label>
 
                     </Grid>
 

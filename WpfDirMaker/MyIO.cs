@@ -64,6 +64,8 @@ namespace WpfDirMaker
         public List<MyTuple> mCacheListOfAllSearchedDirsAndFiles = new List<MyTuple>();
         public List<MyTuple> mCacheListOfAllSearchedDirsAndFilesOrderedByName = new List<MyTuple>();
 
+        public bool ShowDirs = true;
+        public bool FilterByName = true;
 
         // Sökvägar och filnamn till diverse INI och TXT(resultat) filer i CAT
         public string FolderSourceRoot
@@ -243,15 +245,28 @@ namespace WpfDirMaker
 
         private bool FindDuplicates(ref List<MyTuple> resultSearchList, string SearchPattern)
         {
+            if (mCacheListOfAllSearchedDirsAndFiles == null)
+                return false;
+            if (mCacheListOfAllSearchedDirsAndFiles.Count == 0)
+                return false;
             if (mCacheListOfAllSearchedDirsAndFilesOrderedByName == null)
-                return false;
-            if (mCacheListOfAllSearchedDirsAndFilesOrderedByName.Count == 0)
-                return false;
-            if (resultSearchList == null)
-                resultSearchList = new List<MyTuple>();
+                mCacheListOfAllSearchedDirsAndFilesOrderedByName = new List<MyTuple>();
 
             if (mCacheListOfAllSearchedDirsAndFilesOrderedByName.Count == 0)
-                mCacheListOfAllSearchedDirsAndFilesOrderedByName.AddRange(mCacheListOfAllSearchedDirsAndFiles.OrderBy(q => q.Name));
+            {
+
+                if (FilterByName)
+                {
+                    mCacheListOfAllSearchedDirsAndFilesOrderedByName.AddRange(mCacheListOfAllSearchedDirsAndFiles.OrderBy(q => q.Name));
+
+                }
+                else
+                {
+                    mCacheListOfAllSearchedDirsAndFilesOrderedByName.AddRange(mCacheListOfAllSearchedDirsAndFiles.OrderBy(q => q.Size));
+
+                }
+
+            }
 
             resultSearchList.Clear();
             var lastInserted = "";

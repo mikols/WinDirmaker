@@ -26,6 +26,17 @@ namespace WpfDirMaker
         private MyIO mIO = null;
         private Interpreter mInterpreter = null;
 
+        public bool ShowDirs
+        {
+            get => mIO.ShowDirs;
+            set => mIO.ShowDirs = value;
+        }
+
+        public bool FilterBýName
+        {
+            get => mIO.FilterByName;
+            set => mIO.FilterByName = value;
+        }
 
         /// <summary>
         /// CONSTRUCTOR - Konstruerar fönstret
@@ -44,6 +55,10 @@ namespace WpfDirMaker
 
                 mIO = new MyIO();
                 mInterpreter = new Interpreter(mIO);
+
+                CheckBoxFilterDirFolders.DataContext = this;
+                CheckBoxFilterByName.DataContext = this;
+
 
                 textBoxSourceFolder.Text = mIO.FolderSourceRoot;
                 if (textBoxSourceFolder.Text.Length == 0)
