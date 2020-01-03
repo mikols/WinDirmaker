@@ -62,7 +62,7 @@ namespace WpfDirMaker
         public string SearchPattern { get; set; }
 
         public List<MyTuple> mCacheListOfAllSearchedDirsAndFiles = new List<MyTuple>();
-        public List<MyTuple> mCacheListOfAllSearchedDirsAndFilesOrderedByName = new List<MyTuple>();
+        public List<MyTuple> mCacheListOfAllSearchedDirsAndFilesOrdered = new List<MyTuple>();
 
         public bool ShowDirs = true;
         public bool FilterByName = true;
@@ -243,60 +243,73 @@ namespace WpfDirMaker
             return (dataGridList.Count > 0);
         }
 
+        private bool IsPostsEqual(MyTuple e0, MyTuple e1)
+        {
+            if (FilterByName)
+                return e1.Name.ToUpper().Contains(e0.Name.CutStr(5));
+
+            return (e1.Size == e0.Size);
+        }
+
         private bool FindDuplicates(ref List<MyTuple> resultSearchList, string SearchPattern)
         {
             if (mCacheListOfAllSearchedDirsAndFiles == null)
                 return false;
             if (mCacheListOfAllSearchedDirsAndFiles.Count == 0)
                 return false;
-            if (mCacheListOfAllSearchedDirsAndFilesOrderedByName == null)
-                mCacheListOfAllSearchedDirsAndFilesOrderedByName = new List<MyTuple>();
-
-            if (mCacheListOfAllSearchedDirsAndFilesOrderedByName.Count == 0)
+            if (mCacheListOfAllSearchedDirsAndFilesOrdered == null)
+                mCacheListOfAllSearchedDirsAndFilesOrdered = new List<MyTuple>();
+            mCacheListOfAllSearchedDirsAndFilesOrdered.Clear();
+            
+            // Order list of dirs and files
+            if (mCacheListOfAllSearchedDirsAndFilesOrdered.Count == 0)
             {
 
                 if (FilterByName)
                 {
-                    mCacheListOfAllSearchedDirsAndFilesOrderedByName.AddRange(mCacheListOfAllSearchedDirsAndFiles.OrderBy(q => q.Name));
-
+                    mCacheListOfAllSearchedDirsAndFilesOrdered
+                        .AddRange(mCacheListOfAllSearchedDirsAndFiles
+                        .OrderBy(q => q.Name));
                 }
                 else
                 {
-                    mCacheListOfAllSearchedDirsAndFilesOrderedByName.AddRange(mCacheListOfAllSearchedDirsAndFiles.OrderBy(q => q.Size));
-
+                    mCacheListOfAllSearchedDirsAndFilesOrdered
+                        .AddRange(mCacheListOfAllSearchedDirsAndFiles
+                        .OrderBy(q => q.Size));
                 }
-
             }
 
+            // Check if we want to show Directories
+            if (!ShowDirs)
+                mCacheListOfAllSearchedDirsAndFilesOrdered = 
+                    mCacheListOfAllSearchedDirsAndFilesOrdered.Where(e => !e.IsDirectory()).ToList();
+            
+            // Show only duplicates, by name or by size
             resultSearchList.Clear();
             var lastInserted = "";
-            for (int i = 0; i < mCacheListOfAllSearchedDirsAndFilesOrderedByName.Count; i++)
+            for (int i = 0; i <  mCacheListOfAllSearchedDirsAndFilesOrdered.Count; i++)
             {
                 if (i>0)
                 {
-                    var e1 = mCacheListOfAllSearchedDirsAndFilesOrderedByName[i];
-                    var e0 = mCacheListOfAllSearchedDirsAndFilesOrderedByName[i-1];
-                    if (e1.Name.ToUpper().Contains(e0.Name.CutStr(5)))
+                    var myTupleElement1 = mCacheListOfAllSearchedDirsAndFilesOrdered[i];
+                    var myTupleElement0 = mCacheListOfAllSearchedDirsAndFilesOrdered[i-1];
+                    if (IsPostsEqual(myTupleElement0, myTupleElement1))
                     {
-                        lastInserted = e0.Name;
-                        resultSearchList.Add(e0);
+                        lastInserted = myTupleElement0.Name;
+                        resultSearchList.Add(myTupleElement0);
+                        // if last post is duplicate - add the last post too to resultList
+                        if (i == mCacheListOfAllSearchedDirsAndFilesOrdered.Count - 1)
+                            resultSearchList.Add(myTupleElement1);
                     }
                     else
                     {
                         if (lastInserted.Length > 0)
-                            resultSearchList.Add(e0);
+                            resultSearchList.Add(myTupleElement0);
                         lastInserted = "";
                     }
                 }
             }
-            //.Exists(w => SearchPattern.ToUpper().Contains(w.FullName.ToUpper())).Select().ToList()
-            //if (SearchPattern == "*")
-            //    resultSearchList.AddRange(mCacheListOfAllSearchedDirsAndFiles.ToList());
-            //else
-            //    resultSearchList.AddRange(
-            //        mCacheListOfAllSearchedDirsAndFiles
-            //            .Where(a => a.FullName.ToUpper().Contains(SearchPattern.ToUpper())).ToList()
-            //    );
+
             return (resultSearchList.Count > 0);
         }
 
@@ -309,8 +322,9 @@ namespace WpfDirMaker
                 return false;
             if (resultSearchList == null)
                 resultSearchList = new List<MyTuple>();
-
             resultSearchList.Clear();
+
+
             if (SearchPattern == "*")
                 resultSearchList.AddRange(mCacheListOfAllSearchedDirsAndFiles.ToList());
             else
@@ -318,6 +332,12 @@ namespace WpfDirMaker
                     mCacheListOfAllSearchedDirsAndFiles
                         .Where(a => a.FullName.ToUpper().Contains(SearchPattern.ToUpper())).ToList()
                 );
+
+            // Check if we want to show Directories
+            if (!ShowDirs)
+                resultSearchList =
+                    resultSearchList.Where(e => !e.IsDirectory()).ToList();
+
             return (resultSearchList.Count > 0);
         }
 
@@ -360,7 +380,7 @@ namespace WpfDirMaker
                             MessageBox.Show("Exception: " + e.Message);
                             continue;
                         }
-                        resultSearchList.Add(new MyTuple(dir.GetFileNameFromPath(), dir, "", true, "", ""));
+                        resultSearchList.Add(new MyTuple(dir.GetFileNameFromPath(), dir, true, "", ""));
                         foreach (var fileName in _TempListOfFilesInSearchedDirectory)
                         {
                             counter++;

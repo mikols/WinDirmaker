@@ -15,6 +15,23 @@ namespace WpfDirMaker
         {
 
         }
+        public MyTuple(string name, string fullName, bool isDirectory, string suffix, string size)
+        {
+            Name = name;
+            FullName = fullName;
+            if (isDirectory)
+            {
+                Rest = cDirectory;
+                DirectoryName = fullName;
+            }
+            else
+            {
+                Rest = "";
+                DirectoryName = "";
+            }
+            Suffix = suffix;
+            Size = size;
+        }
 
         public MyTuple(string name, string fullName, string dirName, bool isDirectory, string suffix, string size)
         {
