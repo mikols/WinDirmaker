@@ -11,7 +11,7 @@
         </Grid.RowDefinitions>
 
 
-        <TabControl Grid.Row="0" Name="TabCtrlOverall" FontSize="14"  Background="Lavender">
+        <TabControl Grid.Row="0" Name="TabCtrlOverall" FontSize="14"  Background="Green">
             <TabItem Name="MainPage" Header="START" >
 
                 <Grid Name="GridMainPage" Margin="10">
@@ -31,7 +31,7 @@
                             <RowDefinition Height="266*"/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0" CanVerticallyScroll="False" Background="Linen"  Grid.RowSpan="3">
+                        <StackPanel x:Name="SourceDestStackPanel" Grid.Row="0" CanVerticallyScroll="False" Background="#FFBFECB5"  Grid.RowSpan="3">
 
                             <Grid Name="GridSearchSettingsAndFolders" Margin="10" >
                                 <Grid.RowDefinitions>
@@ -659,7 +659,7 @@
             </TabItem>
 
             <TabItem Name="TabItem_Properties" Header="Properties" >
-                <Grid Name="GridProperties" Background="AliceBlue" Margin="30">
+                <Grid Name="GridProperties" Background="LightGreen" Margin="30">
                     <Grid.RowDefinitions>
                         <RowDefinition MaxHeight="30"/>
                         <RowDefinition MaxHeight="30"/>

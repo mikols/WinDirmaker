@@ -363,7 +363,7 @@ namespace WpfDirMaker
                 listOfAllDirectories = Directory.GetDirectories(path, searchPattern, SearchOption.AllDirectories).ToList();
 
                 listOfAllDirectories.ExcludeItemsInList(excludedStringsList);
-
+                listOfAllDirectories.Sort();
                 if (listOfAllDirectories != null && listOfAllDirectories.Count > 0)
                 {
                     foreach (var dir in listOfAllDirectories) // loop directories
