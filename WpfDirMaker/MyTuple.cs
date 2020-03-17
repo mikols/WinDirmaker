@@ -55,9 +55,9 @@ namespace WpfDirMaker
             Suffix = fi.Extension;
             Size = fi.Length.ToString();
         }
+        public string Size { get; private set; }
         public string Name { get; private set; }
         public string FullName { get; private set; }
-        public string Size { get; private set; }
         public string Suffix { get; private set; }
         public string DirectoryName { get; private set; }
         public string Rest { get; private set; }

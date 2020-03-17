@@ -11,7 +11,7 @@
         </Grid.RowDefinitions>
 
 
-        <TabControl Grid.Row="0" Name="TabCtrlOverall" FontSize="14"  Background="Green">
+        <TabControl Grid.Row="0" Name="TabCtrlOverall" FontSize="14"  Background="LightGreen">
             <TabItem Name="MainPage" Header="START" >
 
                 <Grid Name="GridMainPage" Margin="10">
@@ -514,7 +514,7 @@
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition MinHeight="30"/>
                             <RowDefinition/>
                             <RowDefinition MinHeight="30"/>
                         </Grid.RowDefinitions>
@@ -562,9 +562,30 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBox Name="TextboxSearchForDirOrFile" Grid.Column="0" FontSize="14" FontWeight="Bold" Text="{Binding SearchPattern}" KeyDown="TextboxSearchForDirOrFile_KeyDown" KeyUp="TextboxSearchForDirOrFile_KeyUp"/>
-                            <Label Name="LblExcludeFile" Content="Exkludera Mera: " Grid.Row="0" Grid.Column="1" Padding="0" HorizontalAlignment="Right"></Label>
-                            <TextBox Name="TextboxExcludeFileType" Grid.Column="2" FontSize="14" Text="{Binding ExcludedFileTypes}" />
+                            <!--<Label Name="LblExcludeFile" Content="Exkludera Mera: " Grid.Row="0" Grid.Column="1" Padding="0" HorizontalAlignment="Right"></Label>
+                            <TextBox Name="TextboxExcludeFileType" Grid.Column="2" FontSize="14" Text="{Binding ExcludedFileTypes}" />-->
                         </Grid>
+                        
+                        <Button Name="ButtonLoadListOfFileAndDirs" Grid.Row="4" Grid.Column="3" Content="Load" Click="ButtonLoadListOfFileAndDirs_Click" Opacity="0.66" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" Margin="2" BorderThickness="2" BorderBrush="Black" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Yellow" Offset="0"/>
+                                    <GradientStop Color="White" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Cursor" Value="Arrow"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsWorking}" Value="True">
+                                            <Setter Property="Cursor" Value="Wait"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Label Name="labelLoadFoundDirsAndFiles" Grid.Row="4" Grid.Column="4" Foreground="Black" FontWeight="Bold" FontSize="12" >0 objekt laddat i systemet</Label>
+
 
                         <Button Name="ButtonSearchAllDirsAndFiles" Grid.Row="5" Grid.Column="3" Click="ButtonSearchAllDirsAndFiles_Click" Margin="5,0,0,0" RenderTransformOrigin="0.5,0.5" >
                             <Button.Background>
@@ -584,10 +605,6 @@
                             </Button.Background> Duplicates ->
                         </Button>
 
-                        <WrapPanel x:Name="CheckBoxes" Grid.Row="6" Grid.Column="4">
-                            <CheckBox  x:Name="CheckBoxFilterDirFolders" IsChecked="{Binding Path=ShowDirs, Mode=TwoWay}" Content="Show directories" BorderThickness="2,2,2,2" Margin="5" Padding="5,0,0,0"/>
-                            <CheckBox  x:Name="CheckBoxFilterByName" IsChecked="{Binding Path=FilterBýName, Mode=TwoWay}" Content="Filter by name (size)" BorderThickness="2,2,2,2" Margin="5" Padding="5,0,0,0" FontSize="14"/>
-                        </WrapPanel>
 
                         <Grid Grid.Row="5" Grid.Column="4">
                             <Grid.ColumnDefinitions>
@@ -612,29 +629,14 @@
                                     </LinearGradientBrush>
                                 </Button.Background>
                             </Button>
-                            <Button Name="ButtonLoadListOfFileAndDirs" Grid.Row="0" Grid.Column="2" Width="100"  Content="Load" Click="ButtonLoadListOfFileAndDirs_Click" Height="23" VerticalAlignment="Bottom" Opacity="0.66" RenderTransformOrigin="0.5,0.5" FontWeight="Bold" >
-                                
-                                <Button.Background>
-                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                        <GradientStop Color="Yellow" Offset="0"/>
-                                        <GradientStop Color="White" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Button.Background>
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
-                                        <Setter Property="Cursor" Value="Arrow"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsWorking}" Value="True">
-                                                <Setter Property="Cursor" Value="Wait"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            <Label Name="labelLoadFoundDirsAndFiles" Grid.Row="0" Grid.Column="3" Foreground="Green" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right">0 objekt laddat i systemet</Label>
-
 
                         </Grid>
+
+                        <WrapPanel x:Name="CheckBoxes" Grid.Row="6" Grid.Column="4">
+                            <CheckBox  x:Name="CheckBoxFilterDirFolders" IsChecked="{Binding Path=ShowDirs, Mode=TwoWay}" Content="Show directories" BorderThickness="2,2,2,2" Margin="5" Padding="5,0,0,0"/>
+                            <CheckBox  x:Name="CheckBoxFilterByName" IsChecked="{Binding Path=FilterBýName, Mode=TwoWay}" Content="Filter by name (size)" BorderThickness="2,2,2,2" Margin="5" Padding="5,0,0,0" FontSize="14"/>
+                        </WrapPanel>
+
 
                         <!--Next and Last Row in grid -->
                         <Label Name="labelSearchAllDirsInformation" Grid.Row="6" Grid.Column="1" Foreground="#FFC36D32" FontWeight="Bold" FontSize="14">-</Label>
@@ -659,7 +661,7 @@
             </TabItem>
 
             <TabItem Name="TabItem_Properties" Header="Properties" >
-                <Grid Name="GridProperties" Background="LightGreen" Margin="30">
+                <Grid Name="GridProperties" Background="GreenYellow" Margin="30">
                     <Grid.RowDefinitions>
                         <RowDefinition MaxHeight="30"/>
                         <RowDefinition MaxHeight="30"/>
@@ -667,7 +669,7 @@
                         <RowDefinition MaxHeight="30"/>
                         <RowDefinition MaxHeight="30"/>
                         <RowDefinition MaxHeight="30"/>
-                        <RowDefinition MaxHeight="30"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MaxWidth="150"/>
@@ -691,12 +693,27 @@
 
                     <TextBox Name="TextboxProperty4"  Grid.Row="3" Grid.Column="1"  Margin="2" />
                     <Button Name="buttonProperty4" Grid.Row="3" Grid.Column="2" Content="save" Background="AntiqueWhite" FontWeight="Bold" FontSize="14" />
+
+                    <StackPanel  Name="StackPanelErroLogButtons"  Grid.Row="5" Grid.Column="1" Orientation="Horizontal"  >
+                        <Button Name="buttonLoadErrors" Content="Load Log" Background="PaleVioletRed" FontWeight="Bold" FontSize="14" Click="ButtonLoadErrors_Click" Margin="2" />
+                        <Button Name="buttonClearErrors" Content="Clear Log" Background="Green" FontWeight="Bold" FontSize="14"  Margin="2" Click="ButtonClearErrors_Click" />
+                    </StackPanel>
+                    <Grid Name="GridBoxErrors" Grid.Row="6" Grid.Column="1"  Margin="2" ShowGridLines="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                            <ListBox Name="ListBoxErrors" Grid.Row="0" Grid.Column="0" Background="White" Margin="0" Foreground="#FFF01313" FontWeight="Medium">
+                            </ListBox>
+                    </Grid>
                 </Grid>
             </TabItem>
 
         </TabControl>
 
-        <Button Name="buttonClose"  Grid.Row="1"  Click="buttonClose_Click" Background="DarkCyan" Foreground="Black" FontWeight="Bold" FontSize="18" FontFamily="Stencil" >C  L  O  S  E</Button>
+        <Button x:Name="buttonClose"  Grid.Row="1"  Click="buttonClose_Click" Background="Gold" Foreground="Black" FontWeight="Bold" FontSize="18" FontFamily="Gill Sans Ultra Bold" Content="S T Ä Ä N G     A V" />
 
         <StatusBar  Name="statusBar1" Height="25" Grid.Row="2">
             <StatusBar.ItemsPanel>

@@ -947,6 +947,25 @@ namespace WpfDirMaker
 
         #endregion
 
+        private void ButtonLoadErrors_Click(object sender, RoutedEventArgs e)
+        {
+            if (mIO.ErrorLog.Count == 0)
+            {
+                ListBoxErrors.Items.Add("Log is empty!");
+                return;
+            }
+
+            for (int i = 0; i < mIO.ErrorLog.Count; i++)
+            {
+                ListBoxErrors.Items.Add(mIO.ErrorLog[i]);
+            }
+        }
+
+        private void ButtonClearErrors_Click(object sender, RoutedEventArgs e)
+        {
+            mIO.ErrorLog.Clear();
+            ListBoxErrors.Items.Add("Log was Cleared!");
+        }
     }
 
 

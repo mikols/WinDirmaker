@@ -250,7 +250,7 @@ namespace WpfDirMaker
         public static string CutStr(this string value, int nrChars)
         {
             var checkSubstr = "";
-            if (value.Length > 5)
+            if (value.Length > nrChars)
                 checkSubstr = value.ToUpper().Substring(0, nrChars);
             else
                 checkSubstr = value;

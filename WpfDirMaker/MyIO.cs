@@ -23,6 +23,7 @@ namespace WpfDirMaker
         public static string _resolution8;
 
         public List<string> RemoveShitList;
+        public List<string> ErrorLog = new List<string>();
         public string RemoveShitString
         {
             get
@@ -187,7 +188,7 @@ namespace WpfDirMaker
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                LogError("CreateNewSubDirectory(): " + ex.Message);
                 return false;
             }
             return true;
@@ -246,7 +247,10 @@ namespace WpfDirMaker
         private bool IsPostsEqual(MyTuple e0, MyTuple e1)
         {
             if (FilterByName)
-                return e1.Name.ToUpper().Contains(e0.Name.CutStr(5));
+            {
+                return e1.Name.ToUpper() == e0.Name.ToUpper();
+                //return e1.Name.ToUpper().Contains(e0.Name.ToUpper()/*.CutStr(40)*/);
+            }
 
             return (e1.Size == e0.Size);
         }
@@ -354,7 +358,7 @@ namespace WpfDirMaker
 
             if (!Directory.Exists(path))
                 return result;     // Empty list
-            var excludedStringsList = ExcludedFileTypes.Split(';').ToList();
+            var excludedStringsList = ExcludedFileTypes.Split(';').Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
             List<string> listOfAllDirectories = new List<string>();
             int counter = 0;
             try
@@ -377,13 +381,18 @@ namespace WpfDirMaker
                         }
                         catch (Exception e)
                         {
-                            MessageBox.Show("Exception: " + e.Message);
+                            LogError("FindAndAddFoundDirectories(): " + e.Message);
                             continue;
                         }
                         resultSearchList.Add(new MyTuple(dir.GetFileNameFromPath(), dir, true, "", ""));
                         foreach (var fileName in _TempListOfFilesInSearchedDirectory)
                         {
                             counter++;
+                            if (fileName.Length > 250)
+                            {
+                                LogError("FindAndAddFoundDirectories(): Too long filename: " + fileName);
+                                continue;
+                            }
                             bool containsExcludedString = excludedStringsList.Exists(w => fileName.ToUpper().Contains(w.ToUpper()));
                             if (!containsExcludedString)
                             {
@@ -409,7 +418,7 @@ namespace WpfDirMaker
             }
             catch (Exception e)
             {
-                MessageBox.Show("counter: " + counter.ToString() + e.Message);
+                LogError("FindAndAddFoundDirectories(): : "  + e.Message);
                 return false;
             }
             return result;
@@ -497,7 +506,7 @@ namespace WpfDirMaker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("ERROR! Bad App Config file: " + ex.Message);
+                LogError("ERROR! Bad App Config file: " + ex.Message);
                 return false;
             }
             return true;
@@ -575,11 +584,17 @@ namespace WpfDirMaker
             }
             catch (Exception ex)
             {
-                MessageBox.Show("ReadInitFile(): " + ex.Message);
+                LogError("ReadInitFile(): " + ex.Message);
                 return false;
             }
 
             return false;
+        }
+
+        private void LogError(string message)
+        {
+            MessageBox.Show(message);
+            ErrorLog.Add(message);
         }
 
         /// <summary>
